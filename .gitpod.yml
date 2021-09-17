@@ -1,0 +1,16 @@
+image:
+  file: gitpod.Dockerfile
+checkoutLocation: chromium/src/
+ports:
+- port: 6080
+tasks:
+- init: >
+    cd /workspace/chromium &&
+    pyenv local system &&
+    fetch --nohooks --no-history chromium
+    cd src &&
+    ./build/install-build-deps.sh &&
+    gclient runhooks &&
+    gn gen out/Default --args="enable_nacl=false" &&
+    autoninja -C out/default chrome &&
+    out/Default/chrome
